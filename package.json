@@ -1,0 +1,29 @@
+{
+  "name": "discord-intro-bot",
+  "version": "1.0.0",
+  "description": "Discord bot that validates and formats member introductions for AI Learners India community",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "introductions",
+    "community"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/voice": "^0.18.0",
+    "@google/genai": "^1.28.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "ffmpeg-static": "^5.2.0",
+    "libsodium-wrappers": "^0.7.15",
+    "opusscript": "^0.0.8",
+    "pdfkit": "^0.17.2",
+    "prism-media": "^1.3.5"
+  }
+}

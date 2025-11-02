@@ -1,0 +1,215 @@
+Perfect 🔥 You want to use **Replit’s AI Builder (Replit Agent / Ghostwriter Chat)** to **generate your Discord Intro Bot backend automatically**, with **zero coding knowledge** — and make it smart enough to validate, reformat, and update intros just like we discussed.
+
+Here’s your **full ready-to-use prompt** 👇 — copy-paste it **directly into Replit’s AI chat** (or Replit Agent “Prompt to Build” box).
+
+---
+
+## 🧠 Full Prompt for Replit AI Builder
+
+*(Copy and paste everything below into Replit AI Builder)*
+
+---
+
+### 🔧 Instruction for Replit AI
+
+You are an expert full-stack Discord bot developer.
+I want you to build a **Discord Intro Manager Bot** for my community server **AI Learners India**.
+This bot should automatically validate and format introductions posted by new members in a specific channel.
+I don’t have coding knowledge, so please make it **fully no-code friendly**, with **clear setup steps**.
+
+---
+
+### ⚙️ Features Required
+
+#### 🧭 1. Channel Logic
+
+* The bot listens to messages in a channel called `#introductions`.
+* It posts formatted, verified intros to another channel called `#profiles`.
+
+---
+
+#### 🧠 2. Intro Format Rules
+
+Users must follow this format:
+
+```
+  Name:   
+  Role / Study:   
+  Institution / Organization:   
+  Interests (AI Fields or Tools):   
+  Skills (Programming, Platforms, etc.):   
+  Experience Level (Beginner / Intermediate / Advanced):   
+  Goal or What You Want to Build:   
+  Portfolio / GitHub / LinkedIn (optional): 
+```
+
+---
+
+#### ✅ 3. If Format is Correct
+
+* Extract all 7 fields from the message.
+* Generate a **Discord Embed** with:
+
+  * Title: “Member Introduction”
+  * Fields for each section (Name, Role, Interests, Skills, Experience Level , Goal, Portfolio)
+  * Footer: “👤 Added by @username”
+  * Embed color: soft random color
+* Post this embed in `#profiles`.
+
+---
+
+#### ⚠️ 4. If Format is Incomplete or Wrong
+
+* Identify missing fields.
+* Reply to the user in `#introductions` with this message:
+
+```
+⚠️ Your introduction seems incomplete.
+Missing fields: [list missing fields]
+
+Please resend your intro in this format:
+
+🎓 Name:  
+💼 Role / Study:  
+🤖 Interests:  
+🧠 Skills:  
+🚀 Goal:  
+```
+
+---
+
+#### 🔁 5. If User Updates Intro
+
+* If the same user sends a new intro, delete their old one in `#profiles` and replace it with the new one.
+
+---
+
+### 🧰 Technical Requirements
+
+* Use **Node.js** and **discord.js v14+**
+* Load configuration from `.env` file:
+
+  * `DISCORD_TOKEN`
+  * `INTRO_CHANNEL_ID`
+  * `PROFILE_CHANNEL_ID`
+  * `CLIENT_ID`
+  * `GUILD_ID`
+* Use async/await
+* Include clear comments for each section
+* No unnecessary complexity
+* Log all important actions to the console for debugging
+
+---
+
+### 🧩 Folder Structure to Generate
+
+```
+discord-intro-bot/
+├── index.js
+├── .env (example content)
+├── package.json
+├── utils/
+│   ├── validateIntro.js
+│   ├── formatEmbed.js
+│   └── updateProfile.js
+```
+
+---
+
+### 💬 Example Behaviors
+
+**Example 1: Complete intro**
+
+```
+🎓 Name: Amit Singh  
+💼 Role / Study: B.Tech CS Student  
+🤖 Interests: AI, Automation  
+🧠 Skills: Python, ChatGPT, n8n  
+🚀 Goal: Build automation workflows
+```
+
+**Bot action:**
+Posts embed in `#profiles`:
+
+```
+🎓 **Amit Singh**
+💼 B.Tech CS Student
+🤖 AI, Automation
+🧠 Python, ChatGPT, n8n
+🚀 Build automation workflows
+👤 Added by: @Amit Singh
+```
+
+---
+
+**Example 2: Incomplete intro**
+
+```
+Hi I’m Riya from Delhi. I like AI.
+```
+
+**Bot action:**
+Replies:
+
+```
+⚠️ Your introduction seems incomplete.
+Missing fields: Role / Study, Skills, Goal
+
+Please resend your intro in this format:
+
+🎓 Name:  
+💼 Role / Study:  
+🤖 Interests:  
+🧠 Skills:  
+🚀 Goal:  
+```
+
+---
+
+### 🔋 Bonus (optional if simple)
+
+* Support `/updateintro` slash command to update profile manually
+* Save all intros in a local `profiles.json` file for persistence
+* Create a `/deleteintro` command to remove user intro
+
+---
+
+### 📦 Output Requirements
+
+* Generate **a single Replit project** with everything wired together
+* Use `npm install discord.js dotenv`
+* Automatically create an `.env` sample
+* Explain setup in simple terms at the end:
+
+  * Where to paste the bot token
+  * How to invite the bot
+  * How to start it (`npm start`)
+
+---
+
+### 🧱 Expected Output
+
+Generate complete **Node.js code** with all logic included — not just pseudocode.
+The result must be directly runnable inside Replit.
+
+---
+
+### 🧩 End of Prompt
+
+---
+
+### ✅ Optional (for best results)
+
+After you paste this prompt:
+
+1. Name your Replit project `discord-intro-bot`.
+2. When AI Builder finishes generating, go to the **Secrets tab** in Replit and add:
+
+   * `DISCORD_TOKEN`
+   * `INTRO_CHANNEL_ID`
+   * `PROFILE_CHANNEL_ID`
+3. Then click “Run”.
+
+---
+
+Would you like me to now generate the **exact `.env` example** and **Discord permissions URL setup** (so you can invite your bot correctly to your server without coding)?

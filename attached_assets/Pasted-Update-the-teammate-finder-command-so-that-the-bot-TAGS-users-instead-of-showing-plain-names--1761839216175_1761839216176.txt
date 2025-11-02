@@ -1,0 +1,75 @@
+Update the teammate-finder command so that the bot TAGS users instead of showing plain names.
+
+---
+
+🔹 Current Behavior:
+The bot analyzes all user introductions using Gemini AI and returns teammate matches by name only (e.g., "Alies Ray").
+We need to upgrade it so that:
+1. The bot automatically tags those users using their Discord user ID (<@user_id>).
+2. It keeps the AI-generated description and compatibility score.
+3. It color-codes each match according to compatibility.
+
+---
+
+🔹 Updated Requirements:
+
+Each user introduction stored in memory or database should include:
+{
+  id: "DiscordUserID",
+  username: "DiscordUsername",
+  skills: [],
+  interests: [],
+  summary: "AI-generated short intro"
+}
+
+When Gemini API returns top matches in JSON (e.g.):
+[
+  { "username": "Alies Ray", "reason_for_match": "...", "compatibility_score": 9 }
+]
+
+The bot should:
+1. Search the stored intros for a matching username (case-insensitive).
+2. Replace that username with `<@DiscordUserID>` mention.
+3. Build a Discord embed with:
+   - Title: 🤝 Best Teammate Matches for "{query}"
+   - Description: AI Learners Bot analyzed {n} profiles and found your top teammate matches!
+   - For each match:
+        🧑 <@user_id>  
+        💬 {reason_for_match}  
+        💯 Compatibility: {score}/10
+   - Color logic:
+        🟢 ≥ 8
+        🟡 5–7
+        🔴 < 5
+   - Footer: “Verified by AI Learners Bot • {timestamp}”
+   - Thumbnail: requesting user’s profile picture
+
+---
+
+- Prompt Gemini:
+  “Analyze the following introductions and return top 3 best teammate matches for someone looking for {query}.
+   Each result must be a valid JSON array with: username, reason_for_match, compatibility_score.
+   Do not include text outside JSON.”
+
+
+
+Expected Output Example:
+🤝 Best Teammate Matches for "who can help me to build AI projects"
+AI Learners Bot analyzed 8 profiles and found your top teammate matches!
+
+🟢 <@1234567890123>
+💬 Alies is a Machine Learning Engineer experienced in Python, TensorFlow, and PyTorch — ideal for AI project development.
+💯 Compatibility: 9/10
+
+🟡 <@9876543210987>
+💬 Arjun has strong skills in Python and PyTorch and practical AI chatbot experience.
+💯 Compatibility: 8/10
+
+🔴 <@1928374650123>
+💬 Ishita’s experience with Hugging Face and APIs makes them valuable for integration work.
+💯 Compatibility: 7/10
+
+---
+
+Deliverable:
+Generate the full, ready-to-paste code for this feature in Node.js (Discord.js + Gemini API) so it works directly in Replit.

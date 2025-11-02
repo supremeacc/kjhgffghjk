@@ -1,0 +1,122 @@
+Update the existing voice connection and summarization feature of my bot to fix the following error:
+
+❌ ABORT_ERR: "This operation was aborted" during VC connection.
+
+---
+
+### 🧩 GOAL
+
+1. Fix all voice connection timeout or abort errors.  
+2. Support stable joining for VC (even on slow networks like Replit).  
+3. Add retry and validation logic before aborting.  
+4. Continue supporting Hinglish transcription & MoM summarization.  
+5. Work with Discord.js v14 and @discordjs/voice latest version.
+
+---
+
+### 🧠 SOLUTION BLUEPRINT
+
+Replace your `connectToVC` logic with this robust version:
+
+```js
+const {
+  joinVoiceChannel,
+  getVoiceConnection,
+  entersState,
+  VoiceConnectionStatus,
+} = require('@discordjs/voice');
+
+async function connectToVC(channel) {
+  const existing = getVoiceConnection(channel.guild.id);
+  if (existing) return existing;
+
+  let connection;
+  try {
+    connection = joinVoiceChannel({
+      channelId: channel.id,
+      guildId: channel.guild.id,
+      adapterCreator: channel.guild.voiceAdapterCreator,
+      selfDeaf: false,
+      selfMute: false,
+    });
+
+    console.log("⏳ Attempting to connect to VC:", channel.name);
+
+    // Wait for ready, but with error catch
+    await Promise.race([
+      entersState(connection, VoiceConnectionStatus.Ready, 20000),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Voice connection timeout")), 20000)
+      ),
+    ]);
+
+    console.log("✅ Connected successfully to VC!");
+    return connection;
+  } catch (err) {
+    console.error("❌ Primary VC connection failed:", err.message);
+
+    // Retry once with longer wait and fallback
+    try {
+      await new Promise(res => setTimeout(res, 5000));
+      connection = joinVoiceChannel({
+        channelId: channel.id,
+        guildId: channel.guild.id,
+        adapterCreator: channel.guild.voiceAdapterCreator,
+        selfDeaf: false,
+        selfMute: false,
+      });
+      await entersState(connection, VoiceConnectionStatus.Ready, 25000);
+      console.log("✅ Connected after retry!");
+      return connection;
+    } catch (retryErr) {
+      console.error("🚨 Final VC Connection Error:", retryErr);
+      throw new Error("Unable to connect after retry — check VC permissions or slow network.");
+    }
+  }
+}
+🔐 BOT PERMISSION CHECK (before connect)
+Add a validation before trying to join VC:
+
+js
+Copy code
+if (!channel.joinable) {
+  return interaction.reply("❌ I don’t have permission to join this voice channel.");
+}
+if (!channel.speakable) {
+  return interaction.reply("⚠️ I can join but cannot speak — please check my role permissions.");
+}
+🧠 Hinglish Voice Transcription (Updated Whisper setup)
+js
+Copy code
+const transcription = await openai.audio.transcriptions.create({
+  file: fs.createReadStream("./audio.wav"),
+  model: "whisper-1",
+  language: "hi", // Whisper understands Hinglish automatically
+});
+Then summarize:
+
+js
+Copy code
+const summaryPrompt = `
+You are an AI summarizer. The input text may be in Hinglish (Hindi-English mix).
+Generate "Minutes of Meeting" in Hinglish with the following structure:
+1️⃣ Key Topics
+2️⃣ Action Items
+3️⃣ Decisions Taken
+4️⃣ Casual Notes
+`;
+
+const geminiResponse = await fetch(
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + process.env.GEMINI_API_KEY,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: transcription.text + summaryPrompt }] }],
+    }),
+  }
+);
+⚙️ DEPENDENCIES
+sql
+Copy code
+npm install discord.js @discordjs/voice prism-media ffmpeg-static openai node-fetch fs

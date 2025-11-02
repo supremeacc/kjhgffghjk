@@ -1,0 +1,32 @@
+{
+  "projects": {
+    "1761933210016": {
+      "id": "1761933210016",
+      "ownerId": "1413366602812096563",
+      "name": "Supreme 2.0",
+      "description": "Ka svwsgebehe",
+      "type": "Other",
+      "teammates": [
+        "806744863735414795"
+      ],
+      "categoryId": "1433876543729303722",
+      "channelIds": {
+        "chat": "1433876547986526308",
+        "voice": "1433876550331400234"
+      },
+      "createdAt": 1761933210016,
+      "lastActivity": 1761933210016,
+      "status": "active"
+    }
+  },
+  "pendingApplications": {
+    "747332034967634030": {
+      "projectName": "ai learners india",
+      "description": "nothjng but shorts",
+      "projectType": "Other",
+      "teammates": [],
+      "userId": "747332034967634030",
+      "submittedAt": 1761932995534
+    }
+  }
+}

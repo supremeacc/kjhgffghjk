@@ -1,0 +1,114 @@
+You are an expert Discord.js developer and AI automation engineer.
+
+Update the existing Discord bot code to improve the AI-generated introduction embed format and output consistency.
+
+---
+
+🎯 Goal:
+Enhance the bot’s Gemini-powered introduction system to produce cleaner, professional, and consistent Discord embeds that summarize a user’s introduction in a refined format.
+
+---
+
+💡 Key Requirements:
+
+1. **AI Input Refinement**
+   - When the Gemini API analyzes a member’s introduction, it should rewrite the summary in a clear, professional, and engaging style.
+   - The summary must be 2–3 sentences max and written in third person.
+   - Example:
+     - ❌ “I am Riya, a student studying AI.”
+     - ✅ “Riya is a computer science student passionate about Artificial Intelligence and automation.”
+
+---
+
+2. **Improved Embed Structure**
+   - Title: 🎓 Member Introduction
+   - Description: AI-refined summary in natural language.
+   - Fields (each field clearly labeled and aligned):
+     - 🎓 Name  
+     - 💼 Role / Study  
+     - 🏫 Institution  
+     - 🤖 Interests  
+     - 🧠 Skills  
+     - 📈 Experience Level  
+     - 🚀 Goal  
+     - 🔗 Portfolio / Links (optional)
+   - Remove redundant fields like “AI-Detected Role” or “Image”.
+   - Merge similar fields where needed (e.g., Institution / Organization → Institution).
+
+---
+
+3. **Visual Enhancements**
+   - Add user’s profile picture as the thumbnail in the embed.
+   - Tag the user (e.g., `@${user.username}`) at the top of the embed description.
+   - Use consistent spacing and emoji formatting for readability.
+   - Footer: `🧩 Verified by AI Learners India Bot 🤖`
+   - Timestamp: auto-generated using `new Date()`
+
+---
+
+4. **Color Logic**
+   - Beginner → Green (#00FF7F)
+   - Intermediate (Builder) → Yellow (#FFD700)
+   - Advanced (Expert) → Red (#FF0000)
+   - Default → Blue (#1E90FF)
+   - The color is based on the Experience Level detected by Gemini.
+
+---
+
+5. **AI-Refined Summary Rules**
+   - Always start the summary with the member’s name.
+   - Focus on their study/work background, interests, and goals.
+   - Example Output:
+     > Alnirmane is a graduate student in Computer Science at IIT Bombay.  
+     > Passionate about NLP and Computer Vision, skilled in Python and PyTorch.  
+     > Currently focused on building AI chatbots for education accessibility.
+
+---
+
+6. **Command Additions**
+   - Add a slash command `/update_intro` so users can refresh their intro.
+   - On update, re-run the Gemini analysis and replace the existing embed in the profile channel.
+
+---
+
+7. **Error Handling**
+   - If the user’s message is unrelated to intros, ignore silently.
+   - If key details are missing (e.g., no skills or goals), send a private message:
+     > “⚠️ Your intro seems incomplete. Please include your role, skills, and goals for better AI analysis.”
+
+---
+
+8. **Technical Details**
+   - Built using Discord.js v14 and Node.js.
+   - Integrate Gemini Free API for analysis and formatting.
+   - Use Replit Secrets to store tokens (`DISCORD_TOKEN`, `GEMINI_API_KEY`).
+   - Auto-send the refined embed to the `#profiles` channel.
+
+---
+
+✅ Example Output Embed:
+
+**Title:** 🎓 Member Introduction  
+**Description:**  
+> @Alnirmane  
+> Alnirmane is a graduate student in Computer Science at IIT Bombay.  
+> Passionate about NLP and Computer Vision, skilled in Python, PyTorch, OpenCV, and Docker.  
+> Focused on developing AI chatbots for education accessibility.
+
+**Fields:**  
+🎓 **Name:** Alnirmane  
+💼 **Role / Study:** Graduate Student, Computer Science  
+🏫 **Institution:** IIT Bombay  
+🤖 **Interests:** NLP, Computer Vision  
+🧠 **Skills:** Python, PyTorch, OpenCV, Docker  
+📈 **Experience Level:** 🟡 Builder  
+🚀 **Goal:** Build AI-driven chatbots for accessible education  
+🔗 **Links:** linkedin.com/in/arjunmehta  
+
+**Color:** Yellow (#FFD700)  
+**Footer:** 🧩 Verified by AI Learners India Bot 🤖  
+
+---
+
+Final Output:
+Generate the complete, improved bot code ready for deployment on Replit, integrating Gemini API analysis, dynamic embed styling, and update commands.

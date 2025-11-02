@@ -1,0 +1,135 @@
+You are an expert Discord.js developer and AI workflow engineer.
+
+Your task: Update the existing Discord bot for the “AI Learners India” server to include an AI-powered teammate-matching system using the Gemini Free API.
+
+---
+
+GOAL:
+Enable members to find suitable teammates for AI or automation projects by analyzing introductions in the #profiles channel and suggesting the top matches based on skills, interests, and experience.
+
+---
+
+FEATURE REQUIREMENTS:
+
+1. Slash Command
+- Create a new slash command called /find_teammate
+- It accepts one argument: role_or_interest (a string)
+- Example inputs:
+  /find_teammate for UI designer
+  /find_teammate for automation developer
+  /find_teammate for data scientist
+
+---
+
+2. Data Gathering
+- When the command is used:
+  - Fetch all embed messages from the #profiles channel
+  - Extract data from each embed:
+    Name
+    Role / Study
+    Institution
+    Interests
+    Skills
+    Experience Level
+    Goal
+    Username or Mention
+  - Store all data in an array or JSON structure
+  - If no intros are found, reply:
+    "⚠️ No introductions found in the #profiles channel."
+
+---
+
+3. AI Analysis with Gemini API
+- Send the extracted intro data and user query to the Gemini Free API.
+- Use a clear AI prompt like:
+  "Based on these user profiles, find the top 3 members who would be great teammates for someone looking for {role_or_interest}. Consider complementarity in skills, shared interests, and experience. Return structured JSON with fields: username, reason_for_match, compatibility_score (1–10)."
+- Expect structured JSON output like:
+  [
+    {
+      "username": "Riya Sharma",
+      "reason_for_match": "Strong in UI automation and design systems.",
+      "compatibility_score": 9
+    },
+    {
+      "username": "Arjun Mehta",
+      "reason_for_match": "Experienced in front-end AI workflows.",
+      "compatibility_score": 8
+    },
+    {
+      "username": "Dev Patel",
+      "reason_for_match": "Good with AI visualization and teamwork.",
+      "compatibility_score": 8
+    }
+  ]
+
+---
+
+4. Embed Output in Discord
+- Create a refined embed in response to the command.
+- Embed title: "🤝 Best Teammate Matches for {role_or_interest}"
+- Embed description: "AI Learners Bot analyzed all profiles and found your top teammate matches!"
+- For each match, display:
+  🧑 Username (tag user)
+  💬 Reason for match
+  💯 Compatibility score
+- Use color logic:
+  Score >= 9 → Green (#00FF7F)
+  Score 7–8 → Yellow (#FFD700)
+  Score below 7 → Blue (#1E90FF)
+- Add footer: "🧩 Powered by AI Learners India Bot 🤖"
+- Include current timestamp.
+
+---
+
+5. Interactive Reaction (Optional)
+- After posting results, tag matched users.
+- Ask: "👋 Hey {tagged_user}, would you like to collaborate with {requesting_user}? React with ✅ or ❌."
+- If both users react with ✅, send a DM to both:
+  "🎉 You’ve both been matched! Start your project together in #team-projects."
+
+---
+
+6. Technical Implementation
+- Use Discord.js v14 and Node.js
+- Use fetch or axios for Gemini API calls
+- Store API keys securely using Replit Secrets:
+  DISCORD_TOKEN
+  GEMINI_API_KEY
+- Handle errors (timeouts, no response, or malformed JSON)
+- Make all Gemini calls asynchronous with proper await handling
+- Limit search to the top 3 matches for performance
+
+---
+
+7. Optional Add-on
+- Add a slash command /open_to_collab [on|off]
+- If a member sets it to "off", exclude them from future teammate searches
+- Save this preference in Replit’s built-in database or JSON file
+
+---
+
+EXAMPLE EMBED OUTPUT:
+
+Title: 🤝 Best Teammate Matches for UI Designer
+Description: AI Learners Bot analyzed all profiles and found your top teammate matches!
+
+🧑 @Riya Sharma
+💬 Strong in UI automation and design systems.
+💯 Compatibility: 9/10
+
+🧑 @Arjun Mehta
+💬 Experienced in front-end AI workflows.
+💯 Compatibility: 8/10
+
+🧑 @Dev Patel
+💬 Good with AI visualization and teamwork.
+💯 Compatibility: 8/10
+
+Footer: 🧩 Powered by AI Learners India Bot 🤖
+Color: Green (High Compatibility)
+
+---
+
+FINAL TASK:
+Generate complete, working Node.js code using Discord.js v14 and Gemini Free API that implements this teammate-matching system.
+Ensure it runs smoothly in Replit with async handling, role-based color embeds, and proper tagging of members.

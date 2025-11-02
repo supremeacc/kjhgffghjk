@@ -1,0 +1,70 @@
+Fix the `TypeError: response.text is not a function` in `/utils/geminiIntroProcessor.js`.
+
+Goal:
+- Ensure the Gemini API call returns valid text or JSON data.
+- Remove incorrect usage of `response.text()` and replace with proper SDK or fetch pattern.
+- Add complete error handling, type checks, and logging for debugging.
+- The function should return a clean `aiData` object with summary + embedColor.
+
+---
+
+✅ Replace `/utils/geminiIntroProcessor.js` content with:
+
+```js
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+dotenv.config();
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+export async function processIntroWithAI(introData) {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `
+      Analyze this Discord user's introduction and return structured JSON output.
+
+      Input:
+      ${JSON.stringify(introData, null, 2)}
+
+      Output (JSON only, no markdown):
+      {
+        "summary": "short readable summary",
+        "embedColor": "integer Discord embed color"
+      }
+    `;
+
+    const result = await model.generateContent(prompt);
+
+    // ✅ Correct way to get text from Gemini SDK
+    const textResponse = result.response?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    if (!textResponse) throw new Error("Gemini returned empty response");
+
+    // ✅ Safely parse JSON (handle ```json wrappers)
+    const cleanedText = textResponse
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let aiData;
+    try {
+      aiData = JSON.parse(cleanedText);
+    } catch (jsonErr) {
+      console.warn("⚠️ Gemini returned non-JSON response, using fallback text");
+      aiData = { summary: cleanedText.slice(0, 1024), embedColor: 0x5865f2 };
+    }
+
+    return {
+      summary: aiData.summary || "No AI summary available.",
+      embedColor: Number(aiData.embedColor) || 0x5865f2
+    };
+
+  } catch (error) {
+    console.error("❌ Error processing intro with AI:", error);
+    return {
+      summary: `⚠️ AI processing failed: ${error.message}`,
+      embedColor: 0xff0000
+    };
+  }
+}

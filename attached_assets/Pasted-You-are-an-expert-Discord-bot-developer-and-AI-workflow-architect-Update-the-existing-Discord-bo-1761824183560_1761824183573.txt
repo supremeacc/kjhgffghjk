@@ -1,0 +1,91 @@
+You are an expert Discord bot developer and AI workflow architect.
+
+Update the existing Discord bot code with the following logic:
+
+Goal:
+Make the bot accept user introductions even if they are not in the exact provided format.
+The bot should analyze, correct, and refine the input using the Gemini Free API, then automatically generate a clean embed post with role assignment.
+
+---
+
+🧩 Functionality to Implement:
+
+1. **AI Analysis and Formatting**
+   - When a user sends an intro message in the `#introductions` channel:
+     - The bot sends the message to the Gemini Free API.
+     - The AI analyzes the text semantically (not word-for-word) and converts it into a clean, structured intro format with fields:
+       - Name
+       - Role / Study
+       - Institution / Organization
+       - Interests
+       - Skills
+       - Experience Level
+       - Goal
+       - Portfolio / GitHub / LinkedIn (if any)
+
+   - Even if users don’t use the exact format (e.g., "Hi I'm Riya, I study at NIT Trichy and love AI"), the AI should extract correct values and format them properly.
+
+---
+
+2. **Role Assignment**
+   - Based on the “Experience Level” and “Skills,” assign roles dynamically:
+     - Beginner → 🟢 Learner
+     - Intermediate → 🟡 Builder
+     - Advanced → 🔴 Expert
+
+---
+
+3. **Embed Creation**
+   - After AI processing, create a refined embed post in the `#profiles` channel:
+     - Include user’s refined intro data.
+     - Add their Discord username & profile picture as thumbnail.
+     - Tag the user in the embed.
+     - Embed color logic:
+       - More skills & experience = Red (#FF0000)
+       - Intermediate = Yellow (#FFD700)
+       - Beginner = Green (#00FF7F)
+     - Footer: “Verified by AI Learners India Bot 🤖”
+
+---
+
+4. **Update Command**
+   - Add a slash command `/update_intro` that allows users to update their introduction.
+   - When triggered, the bot asks for new info → re-analyzes with Gemini → updates their profile embed and roles accordingly.
+
+---
+
+5. **Error Handling**
+   - If the intro is too short or incomplete, the bot replies privately:
+     “⚠️ Hey {username}, your intro seems incomplete! Please include your role, skills, and goals for better analysis.”
+   - If the message isn’t related to introductions (off-topic), the bot ignores it silently.
+
+---
+
+6. **Technical Setup**
+   - Use Discord.js v14
+   - Use the Gemini Free API for AI analysis and formatting
+   - Ensure that all API keys (Discord & Gemini) are stored securely in environment variables
+   - Handle all API requests asynchronously with proper error handling
+   - Post processed embed automatically in the channel `#profiles`
+
+---
+
+🎯 Example Input:
+"Hey! I’m Ravi, working on automation using n8n and learning AI. I studied at IIT Delhi."
+
+🎯 Example Output (Embed):
+Name: Ravi  
+Role: AI & Automation Developer  
+Institution: IIT Delhi  
+Skills: n8n, AI Automation  
+Experience: Intermediate  
+Goal: Build AI automation bots  
+Portfolio: Not provided  
+Color: Yellow  
+Tag: @Ravi  
+Footer: Verified by AI Learners India Bot 🤖
+
+---
+
+Final Output:
+Generate the complete updated code in Node.js (Discord.js) format ready to deploy in Replit, with Gemini API integrated and all features implemented.

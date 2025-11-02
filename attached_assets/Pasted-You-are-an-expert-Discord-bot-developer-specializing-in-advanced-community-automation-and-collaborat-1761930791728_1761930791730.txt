@@ -1,0 +1,152 @@
+You are an expert Discord bot developer specializing in advanced community automation and collaboration systems.
+Build a “Team Launch System” feature for my existing Discord bot in Node.js using discord.js v14.
+The goal is to let members of my server (AI Learners India) apply for a private project space where they can collaborate on startups, AI projects, or study teams.
+
+🧩 Core Features
+
+Application Trigger (Apply Button)
+
+The bot should send an embed message in a specific channel (e.g., #project-apply) that says:
+
+🚀 Start Your Own AI Project Space!
+Tap the “Apply” button below to create a private space for your startup, project, or study group.
+
+Include a green Apply button.
+
+When a user clicks the button → start an application process via a private thread or temporary private channel.
+
+Application Form (Modal Input)
+
+Show a modal form that collects:
+
+🏷️ Project Name
+
+💡 Short Description
+
+🎯 Project Type (Startup / AI Research / Automation / Study Group / Other)
+
+👥 Initial Teammates (optional mentions)
+
+Verification Process
+
+Once a user submits the form:
+
+The bot creates a temporary private verification channel visible only to:
+
+The applicant
+
+The moderators (role ID to be specified later)
+
+The bot itself
+
+Post an embed summary of their responses.
+
+Include two buttons: ✅ “Approve” and ❌ “Reject”.
+
+If approved → proceed to channel creation.
+
+If rejected → delete the temporary channel and notify the applicant via DM.
+
+Private Channel Creation
+
+On approval:
+
+The bot automatically creates a new category named:
+
+🚀｜Project - <ProjectName>
+
+Inside it, create two channels:
+
+#team-chat
+
+🎙️ team-vc
+
+Give access only to:
+
+The applicant
+
+Mentioned teammates (if any)
+
+Moderator roles
+
+Send a welcome embed in #team-chat:
+
+🎉 Welcome to your private project space!
+Use /add-teammate to invite collaborators.
+Stay active and share your progress!
+
+Teammate Management Command
+
+Command: /add-teammate
+
+Input: mention a user or multiple users.
+
+Bot updates the channel permissions to allow access.
+
+Send confirmation message tagging added users.
+
+Auto-Cleanup or Archive
+
+If the project’s channels are inactive for 15+ days → the bot should send a DM or message:
+
+“Your project space seems inactive. Would you like to archive or keep it active?”
+
+If no response after 3 days → move the category to an Archived Projects category.
+
+Aesthetic and Style
+
+All embeds must have vibrant colors depending on project type:
+
+🧠 AI Research → Blue
+
+⚙️ Automation → Orange
+
+💼 Startup → Purple
+
+🎓 Study Group → Green
+
+Default → Gray
+
+Embed footer: Verified by AI Learners India Bot 🤖
+
+Optional Add-ons (if possible)
+
+Add a “Showcase” channel where approved projects are listed publicly with summaries.
+
+Bot should auto-post:
+
+🧩 New Project Launched!
+“<ProjectName>” by <@creator>
+Type: <Type> | Team: <@teammates>
+
+⚙️ Technical Notes
+
+Use discord.js v14.
+
+Keep token and guild ID as environment variables.
+
+The code should be deployable on Replit and later hosted on Hostinger Node.js.
+
+Avoid external DBs; use a JSON file for basic data storage (project info, member IDs, etc.).
+
+Make sure modals, buttons, and embeds use Discord’s latest Interaction API.
+
+Add proper error handling (e.g., if user already has an existing project or no mod role found).
+
+Deliverables:
+
+Complete working code (main file index.js).
+
+Setup instructions for environment variables (DISCORD_TOKEN, GUILD_ID, MOD_ROLE_ID).
+
+Include setup for slash command /add-teammate.
+
+Ensure all embed messages and interactions are clean, mobile-friendly, and aesthetic.
+
+💡 Final Behavior:
+
+Members apply → get verified → get a private space → manage teammates.
+
+Mods control approvals.
+
+Bot handles automation and AI-powered organization.

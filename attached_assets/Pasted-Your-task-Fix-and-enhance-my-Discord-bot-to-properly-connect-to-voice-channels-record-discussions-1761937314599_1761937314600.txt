@@ -1,0 +1,109 @@
+Your task:
+Fix and enhance my Discord bot to properly connect to voice channels, record discussions, and generate a Hinglish + English Minutes of Meeting (MoM) summary.
+
+Current issue:
+- The bot fails to connect to a VC and shows “⚠️ Couldn't connect to the VC” even with admin role.
+- It should automatically retry and avoid disconnection or timeout issues.
+
+---
+
+### 🎯 GOAL
+Make a robust `/summarize-vc` command that:
+1. **Reliably connects** to the user’s current Voice Channel (VC).
+2. **Listens + records** conversation audio using `@discordjs/voice` and `prism-media`.
+3. **Retries** connection up to 3 times (2 seconds apart) if connection fails.
+4. **Cleans up** and disconnects properly after summarizing or being idle for 2 minutes.
+5. **Handles both English and Hinglish** language conversations automatically.
+
+---
+
+### 🧠 LOGIC FLOW
+
+1. **Voice Channel Connection (Fix)**
+   - Use `joinVoiceChannel` from `@discordjs/voice` with proper `adapterCreator`.
+   - Add a 10-second `entersState()` wait for stable connection.
+   - Implement a retry loop (max 3 attempts) with delay before failing.
+   - Log real errors to console for debugging.
+
+2. **Transcription**
+   - Use Google Speech-to-Text API (or Whisper if available) to transcribe the VC audio.
+   - Store transcript temporarily as `meeting_transcript.txt`.
+
+3. **Hinglish + English Detection**
+   - Send transcript to Gemini Free API with this instruction:
+     ```
+     Detect the main spoken language (English, Hindi, or Hinglish).
+     Summarize the conversation into structured "Minutes of Meeting (MoM)".
+     Preserve Hinglish tone if detected (like “Kal tak backend ready karna hai.”).
+     Add sections:
+     - Key Discussion Points
+     - Action Items
+     - Participants (detected names)
+     - Next Steps
+     ```
+
+4. **Output Embed**
+   - Post summary as a clean embed in text channel:
+     - Title: “🧠 Meeting Summary (Auto-generated)”
+     - Fields:
+       - Detected Language
+       - Key Points (summarized)
+       - Action Items
+     - Color logic:
+       - 🟢 Productive (keywords: “plan”, “done”, “launch”)
+       - 🟠 Brainstorming (keywords: “idea”, “discuss”, “maybe”)
+       - 🔴 Issues (keywords: “problem”, “error”, “stuck”)
+     - Include timestamp + VC name + participant count.
+   - Add `/download-mom` command to generate PDF via `pdfkit` and DM to initiator.
+
+5. **Error Handling**
+   - If VC connect fails after retries: send `⚠️ Couldn't connect to VC. Please ensure I have “Connect” and “Speak” permissions.`
+   - If transcription or Gemini API fails: send `❌ Error processing audio. Please retry.`
+
+6. **Auto Language Response**
+   - Add `/summary-mode` command with options:
+     - `english`
+     - `hinglish`
+     - `auto` (default)
+   - Bot should automatically respond in the same language as detected.
+
+---
+
+### ⚙️ DEPENDENCIES
+Ensure these are installed:
+npm install discord.js @discordjs/voice prism-media libsodium-wrappers @discordjs/opus ffmpeg-static googleapis pdfkit node-fetch
+
+shell
+Copy code
+
+### 🗂 ENV FILE
+DISCORD_TOKEN=your_token_here
+GEMINI_API_KEY=your_gemini_key
+GOOGLE_APPLICATION_CREDENTIALS=./google-credentials.json
+
+shell
+Copy code
+
+### 🧰 ADDITIONAL FIX
+At top of file:
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+yaml
+Copy code
+This prevents Replit SSL handshake issues for VC connections.
+
+---
+
+### 💬 BONUS FEATURE
+After summarizing, the bot says:
+> “✅ Meeting summary is ready! Would you like me to DM it or post publicly?”
+
+If the user chooses “DM”, the bot sends the MoM privately.
+
+---
+
+Final Deliverable:
+- Full working code with `/summarize-vc`, `/stop-summary`, `/summary-mode`, and `/download-mom` commands.
+- Fully stable VC connection with retry logic.
+- Hinglish + English MoM generation and embed output.
+- No more “Failed to connect” errors.

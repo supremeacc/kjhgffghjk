@@ -1,0 +1,83 @@
+You are an expert Discord bot developer.
+
+Task:
+Upgrade my Discord bot for AI Learners India with a modern setup and introduction flow.
+
+🎯 Key Features to Implement:
+
+1. **Setup Wizard (for Mods/Admins)**
+   - Command: `/setup-bot`
+   - Shows interactive dropdowns for selecting:
+     - Intro Channel
+     - Profile Channel
+     - Moderator Role
+     - Verification Channel
+   - Save these IDs automatically in a JSON file or Replit DB.
+   - Include `/setup-reset` to clear configuration.
+
+2. **Introduction Button & Form System**
+   - In the Intro Channel, bot posts a message:
+     > “🎓 Welcome to AI Learners India! Click below to introduce yourself!”
+     - Add button: [🪪 Introduce Yourself]
+   - When clicked → open Discord modal with fields:
+     - Name
+     - Role / Study
+     - Institution / Organization
+     - Interests (AI Fields or Tools)
+     - Skills
+     - Experience Level (Dropdown: Beginner / Builder / Pro)
+     - Goal
+     - Portfolio / Links
+   - On submit:
+     - Send form data to Gemini API to refine and format it naturally in Hinglish.
+     - AI decides appropriate embed color:
+       🟢 Beginner, 🟡 Builder, 🔴 Pro.
+     - AI assigns pre-existing role (developer, designer, automation, etc.).
+     - Post refined profile embed in the selected Profile Channel.
+     - Tag user and display their avatar in the embed.
+
+3. **Role Detection**
+   - Based on the AI analysis, automatically assign one matching pre-existing role.
+   - Do NOT create new roles — only assign from existing ones.
+
+4. **Update & Edit System**
+   - Command: `/edit-profile`
+   - Opens the same modal form pre-filled with previous info (if saved).
+   - Replaces old embed in Profile Channel with updated version.
+
+5. **Data Storage**
+   - Store all intro data in Replit DB or a JSON file with:
+     {
+       "userId": "12345",
+       "name": "...",
+       "skills": "...",
+       "roleAssigned": "Developer",
+       "profileMessageId": "..."
+     }
+
+6. **Hinglish + English AI Understanding**
+   - Allow Hinglish input (mix of Hindi + English).
+   - Gemini API should detect language automatically and reply in natural Hinglish-English mix.
+   - Example prompt for AI:
+     "Refine the following introduction in Hinglish, keeping it professional but friendly."
+
+7. **Error Handling**
+   - If API fails or form incomplete, send an ephemeral message:
+     “⚠️ Something went wrong. Please try again or contact a moderator.”
+
+💡 Optional Enhancements:
+   - Add badges (🧠, ⚙️, 🪄) in the embed footer based on skill detection.
+   - Add “Find Similar Learners” button below profile that triggers teammate matching feature.
+
+Libraries:
+- discord.js v14
+- discord-modals
+- replit-db
+- node-fetch
+- google-generative-ai (for Gemini)
+
+Ensure:
+- Works with slash commands + buttons + modals.
+- Can run fully on Replit free plan.
+- Includes clear comments for easy customization.
+
